@@ -1,0 +1,14 @@
+{
+  "rewrites": [
+    { "source": "/api/auth",       "destination": "/api/auth.js" },
+    { "source": "/api/dashboard",  "destination": "/api/dashboard.js" },
+    { "source": "/api/load-all",   "destination": "/api/load-all.js" },
+    { "source": "/api/products",   "destination": "/api/products.js" },
+    { "source": "/api/customers",  "destination": "/api/customers.js" },
+    { "source": "/api/suppliers",  "destination": "/api/suppliers.js" },
+    { "source": "/api/sales",      "destination": "/api/sales.js" },
+    { "source": "/api/purchases",  "destination": "/api/purchases.js" },
+    { "source": "/api/expenses",   "destination": "/api/expenses.js" },
+    { "source": "/api/report",     "destination": "/api/report.js" }
+  ]
+}

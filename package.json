@@ -1,0 +1,8 @@
+{
+  "name": "dokan-hisab",
+  "version": "1.0.0",
+  "description": "দোকান হিসাব — General shopkeeper management app",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.39.0"
+  }
+}
