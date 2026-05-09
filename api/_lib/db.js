@@ -1,9 +1,28 @@
 const { createClient } = require('@supabase/supabase-js');
 
-const supabase = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_KEY
-);
+// Validate environment variables at startup — gives a clear error
+// instead of Supabase's cryptic "invalid path" message
+function getSupabase() {
+  const url = process.env.SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_KEY;
+  if (!url || url === 'your-supabase-url') {
+    throw new Error('Vercel-এ SUPABASE_URL environment variable সেট করা হয়নি। Vercel dashboard → Settings → Environment Variables-এ যান।');
+  }
+  if (!key || key === 'your-service-key') {
+    throw new Error('Vercel-এ SUPABASE_SERVICE_KEY environment variable সেট করা হয়নি। Vercel dashboard → Settings → Environment Variables-এ যান।');
+  }
+  return createClient(url, key);
+}
+
+// Create client once per cold start (cached between warm invocations)
+let _client = null;
+function db() {
+  if (!_client) _client = getSupabase();
+  return _client;
+}
+
+// Export as `supabase` so all existing API files work with zero changes
+Object.defineProperty(module.exports, 'supabase', { get: db, enumerable: true });
 
 function cors(res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -121,8 +140,8 @@ function mapLedger(r) {
   };
 }
 
-module.exports = {
-  supabase, cors, num, now_, iso, sid,
+module.exports = Object.assign(module.exports, {
+  cors, num, now_, iso, sid,
   mapProduct, mapCustomer, mapSupplier,
   mapSale, mapSaleItem, mapPurchase, mapExpense, mapLedger
-};
+});
